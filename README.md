@@ -55,4 +55,4 @@ To modify the [official RTSP firmware](https://wyzelabs.zendesk.com/hc/en-us/art
 
 ---
 
-Thanks to Thomas Fischer for the [JFFS2 mount script](fwhacking/mount.jffs2)!
+Thanks to [jlegarreta](https://github.com/jlegarreta) for the [JFFS2 mount/unmount scripts](jlegarreta/mount.jffs2)!

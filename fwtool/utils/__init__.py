@@ -244,9 +244,11 @@ def __mount_jffs2(unpack_dir, jffs2_path):
 
 def __unmount_jffs2(unpack_dir):
     mount_dir = os.path.join(unpack_dir, 'jffs2')
+    print('Unmounting ' + mount_dir, end=' ... ')
     subprocess.run(
-        ['sudo', 'umount', mount_dir],
+        ['sudo', 'support/scripts/umount.jffs2.sh', mount_dir],
     )
+    print('Done!')
 
 
 def __unsquash(unpack_dir, squashfs_path):
