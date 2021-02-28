@@ -1,0 +1,33 @@
+#!/usr/bin/env python3
+
+from fwtool.utils import download_firmware, unzip_firmware, unpack_bin, pack_bin, wait_for_mods
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    '-f',
+    '--firmware-version',
+    nargs='?',
+    help='The version number of the firmware to modify'
+)
+parser.add_argument(
+    '-r',
+    '--rtsp',
+    action='store_true',
+    help='Download the RTSP firmware. If used the Firmware Version argument is ignored.'
+)
+args = parser.parse_args()
+
+if args.rtsp:
+    zip_file = download_firmware(rtsp=True)
+else:
+    if args.firmware_version:
+        fw_ver = args.firmware_version
+    else:
+        fw_ver = input('Firmware Version To Patch: ')
+    zip_file = download_firmware(version=fw_ver)
+
+bin_file = unzip_firmware(zip_file)
+unpack_dir = unpack_bin(bin_file)
+wait_for_mods(unpack_dir)
+pack_bin(unpack_dir)
