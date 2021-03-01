@@ -30,11 +30,11 @@ def enable_usbnet(squashfs_1, squashfs_2, jffs2):
         with open(init_file, 'r+') as f:
             text = f.read()
             #text = re.sub('/system/bin/sinker &', '/system/bin/sinker &\n/system/bin/eth0_init.sh &', text)
-            text = re.sub(
-                '/system/bin/sinker &',
-                '/system/bin/sinker &\n\nifconfig eth0 up\nudhcpc -i eth0 -p /var/run/udhcpc_eth0.pid -b',
-                text
-            )
+            #text = re.sub(
+            #    '/system/bin/sinker &',
+            #    '/system/bin/sinker &\n\nifconfig eth0 up\nudhcpc -i eth0 -p /var/run/udhcpc_eth0.pid -b',
+            #    text
+            #)
             if os.path.join(jffs2, 'init', 'app_init_da.sh') == init_file:
                 text = re.sub(
                     'insmod /driver/audio.ko',
