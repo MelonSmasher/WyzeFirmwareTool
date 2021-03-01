@@ -35,14 +35,16 @@ pip install -r requirements.txt
 
 ### Usage
 
+This program requires sudo to manage the JFFS2 image.
+
 #### Modify a specific firmware version
 
 Pick a version number
 from [this page](https://wyzelabs.zendesk.com/hc/en-us/articles/360024852172-Release-Notes-Firmware).
 
 ```bash
-./wyzefwtool -f <firmware-version>
-# E.G: ./wyzefwtool -f 4.9.6.218
+sudo ./wyzefwtool -f <firmware-version>
+# E.G: sudo ./wyzefwtool -f 4.9.6.218
 ```
 
 #### Modify the RTSP firmware
@@ -51,7 +53,7 @@ To modify the [official RTSP firmware](https://wyzelabs.zendesk.com/hc/en-us/art
 the following:
 
 ```bash
-./wyzefwtool -r
+sudo ./wyzefwtool -r
 ```
 
 #### All command options

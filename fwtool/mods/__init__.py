@@ -15,20 +15,28 @@ def enable_usbnet(squashfs_2, jffs2):
     shutil.copyfile('support/ko/asix.ko', os.path.join(squashfs_2, 'asix.ko'))
     print('Done!')
     print('Updating init files', end='... ')
+    init_da = os.path.join(jffs2, 'init', 'app_init_da.sh')
     init_files = [
         os.path.join(jffs2, 'init', 'app_init.sh'),
         os.path.join(jffs2, 'init', 'app_init_xiao.sh'),
-        os.path.join(jffs2, 'init', 'app_init_da.sh')
+        init_da
     ]
 
     for init_file in init_files:
         with open(init_file, 'r+') as f:
             text = f.read()
-            text = re.sub(
-                "insmod /driver/rtl8189ftv\\.ko",
-                "insmod /driver/rtl8189ftv.ko\ninsmod /driver/usbnet.ko\ninsmod /driver/asix.ko\n",
-                text
-            )
+            if f == init_da:
+                text = re.sub(
+                    "insmod /driver/audio\\.ko",
+                    "insmod /driver/audio.ko\ninsmod /driver/usbnet.ko\ninsmod /driver/asix.ko\n",
+                    text
+                )
+            else:
+                text = re.sub(
+                    "insmod /driver/rtl8189ftv\\.ko",
+                    "insmod /driver/rtl8189ftv.ko\ninsmod /driver/usbnet.ko\ninsmod /driver/asix.ko\n",
+                    text
+                )
             f.seek(0)
             f.write(text)
             f.truncate()
