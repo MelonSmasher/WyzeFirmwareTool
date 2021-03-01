@@ -1,6 +1,7 @@
 import shutil
 import re
 import os
+import subprocess
 
 
 def enable_usbnet(squashfs_1, squashfs_2, jffs2):
@@ -16,6 +17,8 @@ def enable_usbnet(squashfs_1, squashfs_2, jffs2):
     print('Copying custom script', end='... ')
     eth_file = os.path.join(squashfs_1, 'etc', 'init.d', 'eth0_init.sh')
     shutil.copyfile('support/mods/scripts/eth0_init.sh', eth_file)
+    subprocess.run(['sudo', 'chmod', '+x', eth_file])
+    subprocess.run(['sudo', 'chown', '501:0', eth_file])
     print('Done!')
     print('Updating init file', end='... ')
     init_file = os.path.join(squashfs_1, 'etc', 'init.d', 'rcS')
