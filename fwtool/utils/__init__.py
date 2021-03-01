@@ -240,12 +240,16 @@ def __get_fw_parts():
 
 
 def __mount_jffs2(unpack_dir, jffs2_path):
+    # Copy the jffs2 file to jffs2_new
+    shutil.copyfile(jffs2_path, jffs2_path + '_new')
+    # The path of the file to mount
+    mount_file = jffs2_path + '_new'
     # Build the dir path to mount to
     mount_dir = os.path.join(unpack_dir, os.path.basename(jffs2_path))
-    print('Mounting ' + jffs2_path + ' at ' + mount_dir, end=' ... ')
+    print('Mounting ' + mount_file + ' at ' + mount_dir, end=' ... ')
     pathlib.Path(mount_dir).mkdir(parents=True, exist_ok=True)
     subprocess.run(
-        ['sudo', 'support/scripts/mount.jffs2.sh', jffs2_path, mount_dir],
+        ['sudo', 'support/scripts/mount.jffs2.sh', mount_file, mount_dir],
     )
     print('Done!')
 

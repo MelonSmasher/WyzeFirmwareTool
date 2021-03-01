@@ -32,27 +32,14 @@ else
 fi
 
 # cleanup if necessary
-umount /tmp/mtdblock0 &>/dev/null
-umount $2 &>/dev/null
-modprobe -r jffs2 &>/dev/null
-modprobe -r block2mtd &>/dev/null
+umount /dev/mtdblock0 &>/dev/null
+modprobe -r mtdram &>/dev/null
 modprobe -r mtdblock &>/dev/null
-sleep 0.25
-losetup -d /dev/loop1 &>/dev/null
-sleep 0.25
 
-modprobe loop || exit 1
-losetup /dev/loop1 "$1" || exit 1
-modprobe block2mtd || exit 1
-modprobe jffs2 || exit 1
-if [[ ! -e /tmp/mtdblock0 ]]
-then
-    mknod /tmp/mtdblock0 b 31 0 || exit 1
-fi
-
-echo "/dev/loop1,${esize}KiB" > /sys/module/block2mtd/parameters/block2mtd
-
-mount -t jffs2 /tmp/mtdblock0 "$2" || exit 1
+modprobe mtdram total_size=4736 erase_size=$esize || exit 1
+modprobe mtdblock || exit 1
+dd if="$1" of=/dev/mtdblock0 || exit 1
+mount -t jffs2 -o rw /dev/mtdblock0 $2 || exit 1
 
 echo "Successfully mounted $1 on $2"
 exit 0
