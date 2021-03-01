@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from fwtool.utils import download_firmware, unzip_firmware, unpack_bin, pack_bin, wait_for_mods
+from fwtool.utils import download_firmware, unzip_firmware, unpack_bin, pack_bin, run_mods, wait_for_mods
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -16,6 +16,18 @@ parser.add_argument(
     action='store_true',
     help='Download the RTSP firmware. If used the Firmware Version argument is ignored.'
 )
+parser.add_argument(
+    '-u',
+    '--usb-ethernet',
+    action='store_true',
+    help='Enable USB Ethernet support for ASIX based ethernet adapters.'
+)
+parser.add_argument(
+    '-t',
+    '--telnet-server',
+    action='store_true',
+    help='Enable persistent telnet server on the camera.'
+)
 args = parser.parse_args()
 
 if args.rtsp:
@@ -29,5 +41,10 @@ else:
 
 bin_file = unzip_firmware(zip_file)
 unpack_dir = unpack_bin(bin_file)
+run_mods(
+    unpack_dir,
+    usb_eth=args.usb_ethernet,
+    telnet=args.telnet_server
+)
 wait_for_mods(unpack_dir)
 pack_bin(unpack_dir)

@@ -6,13 +6,12 @@ A simple tool to handle some mundane tasks that are required when modifying Wyze
 
 This tool downloads, unpacks, and repacks Wyze firmware files.
 
-At this time it does NOT make any changes to the firmware.
-
 ## Camera Support
 
 * Wyze Cam v2
 
-I only have a Wyze Cam v2 to mess around with. If you have a device you're willing to potentially brick feel free to mess around with this.
+I only have a Wyze Cam v2 to mess around with. If you have a device you're willing to potentially brick feel free to
+mess around with this.
 
 ## Setup
 
@@ -38,7 +37,8 @@ pip install -r requirements.txt
 
 #### Modify a specific firmware version
 
-Pick a version number from [this page](https://wyzelabs.zendesk.com/hc/en-us/articles/360024852172-Release-Notes-Firmware).
+Pick a version number
+from [this page](https://wyzelabs.zendesk.com/hc/en-us/articles/360024852172-Release-Notes-Firmware).
 
 ```bash
 ./wyzefwtool -f <firmware-version>
@@ -47,10 +47,25 @@ Pick a version number from [this page](https://wyzelabs.zendesk.com/hc/en-us/art
 
 #### Modify the RTSP firmware
 
-To modify the [official RTSP firmware](https://wyzelabs.zendesk.com/hc/en-us/articles/360026245231-Wyze-Cam-RTSP), run the following:
+To modify the [official RTSP firmware](https://wyzelabs.zendesk.com/hc/en-us/articles/360026245231-Wyze-Cam-RTSP), run
+the following:
 
 ```bash
 ./wyzefwtool -r
+```
+
+#### All command options
+
+```bash
+usage: wyzefwtool [-h] [-f [FIRMWARE_VERSION]] [-r] [-u] [-t]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f [FIRMWARE_VERSION], --firmware-version [FIRMWARE_VERSION]
+                        The version number of the firmware to modify
+  -r, --rtsp            Download the RTSP firmware. If used the Firmware Version argument is ignored.
+  -u, --usb-ethernet    Enable USB Ethernet support for ASIX based ethernet adapters.
+  -t, --telnet-server   Enable persistent telnet server on the camera.
 ```
 
 ---

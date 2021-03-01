@@ -1,5 +1,6 @@
 from urllib.parse import urlparse
 from fwtool.models import FirmwarePart
+from fwtool.mods import enable_usbnet, enable_telnet
 import os
 import requests
 import zipfile
@@ -95,6 +96,17 @@ def unpack_bin(bin_path):
             __mount_jffs2(unpack_dir, outfile_path)
     # Return the directory with the parts
     return unpack_dir
+
+
+def run_mods(unpack_dir, usb_eth=False, telnet=False):
+    squashfs_1 = os.path.join(unpack_dir, 'squashfs_1')
+    squashfs_2 = os.path.join(unpack_dir, 'squashfs_2')
+    # jffs2 = os.path.join(unpack_dir, 'jffs2')
+
+    if usb_eth:
+        enable_usbnet(squashfs_2)
+    if telnet:
+        enable_telnet(os.path.join(squashfs_1, 'etc', 'init.d', 'rcS'))
 
 
 def wait_for_mods(unpack_dir):
