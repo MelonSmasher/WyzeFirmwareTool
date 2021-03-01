@@ -15,16 +15,24 @@ def enable_usbnet(squashfs_1, squashfs_2, jffs2):
     shutil.copyfile('support/mods/ko/asix.ko', os.path.join(squashfs_2, 'asix.ko'))
     print('Done!')
     print('Copying custom script', end='... ')
-    eth_file = os.path.join(squashfs_1, 'etc', 'init.d', 'eth0_init.sh')
+    eth_file = os.path.join(jffs2, 'bin', 'eth0_init.sh')
     shutil.copyfile('support/mods/scripts/eth0_init.sh', eth_file)
     subprocess.run(['sudo', 'chmod', '+x', eth_file])
     subprocess.run(['sudo', 'chown', '501:0', eth_file])
     print('Done!')
     print('Updating init file', end='... ')
-    init_file = os.path.join(squashfs_1, 'etc', 'init.d', 'rcS')
-    file_object = open(init_file, 'a')
-    file_object.write('chmod a+x /etc/init.d/eth0_init.sh\n')
-    file_object.write('/etc/init.d/eth0_init.sh &\n')
+    init_files = [
+        os.path.join(jffs2, 'init', 'app_init.sh'),
+        os.path.join(jffs2, 'init', 'app_init_xiao.sh'),
+        os.path.join(jffs2, 'init', 'app_init_da.sh')
+    ]
+    for init_file in init_files:
+        with open(init_file, 'r+') as f:
+            text = f.read()
+            text = re.sub('/system/bin/sinker &', '/system/bin/sinker &\n/system/bin/eth0_init.sh &', text)
+            f.seek(0)
+            f.write(text)
+            f.truncate()
     print('Done!')
 
 
