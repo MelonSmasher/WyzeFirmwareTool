@@ -69,7 +69,3 @@ optional arguments:
   -u, --usb-ethernet    Enable USB Ethernet support for ASIX based ethernet adapters.
   -t, --telnet-server   Enable persistent telnet server on the camera.
 ```
-
----
-
-Thanks to [jlegarreta](https://github.com/jlegarreta) for the [JFFS2 mount/unmount scripts](jlegarreta/mount.jffs2)!

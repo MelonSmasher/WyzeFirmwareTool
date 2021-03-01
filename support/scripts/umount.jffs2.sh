@@ -4,7 +4,7 @@ set -e
 DST=${1}
 
 if [[ -z "${1:-}" ]]; then
-  echo "Usage: umount.jffs2 DST"
+  echo "Usage: umount.jffs2 DST SYNC_FILE"
   exit
 fi
 
@@ -14,6 +14,7 @@ if [[ ${EUID} -ne 0 ]]; then
 fi
 
 if sudo umount ${DST}; then
+  sudo dd of=/dev/mtdblock0 if="${2}"
   rmmod mtdblock 2>/dev/null
   rmmod mtdram 2>/dev/null
   rmmod jffs2 2>/dev/null

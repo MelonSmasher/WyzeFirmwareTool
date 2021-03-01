@@ -1,31 +1,48 @@
 #!/bin/bash
-set -e
 
-SRC=${1}
-DST=${2}
+## Script to mount jffs2 filesystem using mtd kernel modules.
+## EMAC, Inc. 2009
 
-if [[ -z "${2:-}" ]]; then
-  echo "Usage: mount.jffs2 SRC DST"
-  exit
+if [[ $# -lt 2 ]]
+then
+    echo "Usage: $0 FSNAME.JFFS2 MOUNTPOINT [ERASEBLOCK_SIZE]"
+    exit 1
 fi
 
-if mount | grep -q mtdblock0; then
-  echo "${SRC} already mounted" 1>&2
-  exit 1
+if [ "$(whoami)" != "root" ]
+then
+    echo "$0 must be run as root!"
+    exit 1
 fi
 
-if [[ ${EUID} -ne 0 ]]; then
-  echo "mount.jffs2: only root can do that" 1>&2
-  exit 1
+if [[ ! -e $1 ]]
+then
+    echo "$1 does not exist"
+    exit 1
 fi
 
-rmmod mtdblock 2>/dev/null || true
-rmmod mtdram 2>/dev/null || true
-rmmod jffs2 2>/dev/null || true
+if [[ ! -d $2 ]]
+then
+    echo "$2 is not a valid mount point"
+    exit 1
+fi
 
-modprobe mtdblock
-modprobe mtdram total_size=65536 erase_size=256
-modprobe jffs2
+if [[ "$3" == "" ]]
+then
+	esize="128"
+else
+	esize="$3"
+fi
 
-dd if="${SRC}" of=/dev/mtdblock0 2>/dev/null
-mount -t jffs2 /dev/mtdblock0 "${DST}"
+# cleanup if necessary
+umount /dev/mtdblock0 &>/dev/null
+modprobe -r mtdram &>/dev/null
+modprobe -r mtdblock &>/dev/null
+
+modprobe mtdram total_size=32768 erase_size=$esize || exit 1
+modprobe mtdblock || exit 1
+dd if="$1" of=/dev/mtdblock0 || exit 1
+mount -t jffs2 /dev/mtdblock0 $2 || exit 1
+
+echo "Successfully mounted $1 on $2"
+exit 0
