@@ -1,45 +1,26 @@
 import shutil
 import re
 import os
-import subprocess
 
 
-def enable_usbnet(squashfs_2, jffs2):
+def enable_usbnet(squashfs_1, squashfs_2, jffs2):
     print('')
     print('######################################')
     print('Enabling USB ethernet support')
     print('######################################')
     print('Enabling USB ethernet support for ASIX based ethernet adapters...')
     print('Copying kernel modules', end='... ')
-    shutil.copyfile('support/ko/usbnet.ko', os.path.join(squashfs_2, 'usbnet.ko'))
-    shutil.copyfile('support/ko/asix.ko', os.path.join(squashfs_2, 'asix.ko'))
+    shutil.copyfile('support/mods/ko/usbnet.ko', os.path.join(squashfs_2, 'usbnet.ko'))
+    shutil.copyfile('support/mods/ko/asix.ko', os.path.join(squashfs_2, 'asix.ko'))
     print('Done!')
-    print('Updating init files', end='... ')
-    init_da = os.path.join(jffs2, 'init', 'app_init_da.sh')
-    init_files = [
-        os.path.join(jffs2, 'init', 'app_init.sh'),
-        os.path.join(jffs2, 'init', 'app_init_xiao.sh'),
-        init_da
-    ]
-
-    for init_file in init_files:
-        with open(init_file, 'r+') as f:
-            text = f.read()
-            if init_file == init_da:
-                text = re.sub(
-                    "insmod /driver/audio\\.ko",
-                    "insmod /driver/audio.ko\ninsmod /driver/usbnet.ko\ninsmod /driver/asix.ko\n",
-                    text
-                )
-            else:
-                text = re.sub(
-                    "insmod /driver/rtl8189ftv\\.ko",
-                    "insmod /driver/rtl8189ftv.ko\ninsmod /driver/usbnet.ko\ninsmod /driver/asix.ko\n",
-                    text
-                )
-            f.seek(0)
-            f.write(text)
-            f.truncate()
+    print('Copying custom script', end='... ')
+    shutil.copyfile('support/mods/scripts/eth0_init.sh', os.path.join(squashfs_1, 'root', 'eth0_init.sh'))
+    print('Done!')
+    print('Updating init file', end='... ')
+    init_file = os.path.join(squashfs_1, 'etc', 'init.d', 'rcS')
+    file_object = open(init_file, 'a')
+    file_object.write('chmod a+x /root/eth0_init.sh')
+    file_object.write('/root/eth0_init.sh &')
     print('Done!')
 
 

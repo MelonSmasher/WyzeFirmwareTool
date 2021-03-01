@@ -104,7 +104,7 @@ def run_mods(unpack_dir, usb_eth=False, telnet=False):
     jffs2 = os.path.join(unpack_dir, 'jffs2')
 
     if usb_eth:
-        enable_usbnet(squashfs_2, jffs2)
+        enable_usbnet(squashfs_1, squashfs_2, jffs2)
     if telnet:
         enable_telnet(os.path.join(squashfs_1, 'etc', 'init.d', 'rcS'))
 
