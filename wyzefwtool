@@ -2,6 +2,15 @@
 
 from fwtool.utils import download_firmware, unzip_firmware, unpack_bin, pack_bin, run_mods, wait_for_mods
 import argparse
+import os
+
+
+class NotSudo(Exception):
+    pass
+
+
+if os.getuid() != 0:
+    raise NotSudo("This program is not run as sudo or elevated this it will not work")
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
