@@ -1,8 +1,5 @@
 #!/bin/bash
 
-## Script to mount jffs2 filesystem using mtd kernel modules.
-## EMAC, Inc. 2009
-
 if [[ $# -lt 2 ]]
 then
     echo "Usage: $0 FSNAME.JFFS2 MOUNTPOINT [ERASEBLOCK_SIZE]"
@@ -29,7 +26,7 @@ fi
 
 if [[ "$3" == "" ]]
 then
-	esize="128"
+	esize="64"
 else
 	esize="$3"
 fi
@@ -39,7 +36,7 @@ umount /dev/mtdblock0 &>/dev/null
 modprobe -r mtdram &>/dev/null
 modprobe -r mtdblock &>/dev/null
 
-modprobe mtdram total_size=32768 erase_size=$esize || exit 1
+modprobe mtdram total_size=4736 erase_size=$esize || exit 1
 modprobe mtdblock || exit 1
 dd if="$1" of=/dev/mtdblock0 || exit 1
 mount -t jffs2 -o rw /dev/mtdblock0 $2 || exit 1
