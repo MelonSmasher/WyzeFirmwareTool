@@ -185,7 +185,7 @@ def pack_bin(unpack_dir):
             # Reassign the part name with the '_new' suffix
             part_name = part_name + '_new'
             # Unmount the JFFS2 image
-            __unmount_jffs2(unpack_dir)
+            __unmount_jffs2(unpack_dir, os.path.join(parts_dir, part_name))
         part_file = open(os.path.join(parts_dir, part_name), "rb")
         data = part_file.read()
         intermediate_bin.write(data)
@@ -254,11 +254,11 @@ def __mount_jffs2(unpack_dir, jffs2_path):
     print('Done!')
 
 
-def __unmount_jffs2(unpack_dir):
+def __unmount_jffs2(unpack_dir, sync_file):
     mount_dir = os.path.join(unpack_dir, 'jffs2')
     print('Unmounting ' + mount_dir, end=' ... ')
     subprocess.run(
-        ['sudo', 'support/scripts/umount.jffs2.sh', mount_dir],
+        ['sudo', 'support/scripts/umount.jffs2.sh', mount_dir, sync_file],
     )
     print('Done!')
 
