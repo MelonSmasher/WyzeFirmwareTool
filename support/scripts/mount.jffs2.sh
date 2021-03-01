@@ -38,11 +38,12 @@ modprobe -r jffs2 &>/dev/null
 modprobe -r block2mtd &>/dev/null
 modprobe -r mtdblock &>/dev/null
 sleep 0.25
-losetup -d /dev/loop1 &>/dev/null
+export loop=$(losetup -f)
+losetup -d $loop &>/dev/null
 sleep 0.25
 
 modprobe loop || exit 1
-losetup /dev/loop1 "$1" || exit 1
+losetup $loop "$1" || exit 1
 modprobe block2mtd || exit 1
 modprobe jffs2 || exit 1
 if [[ ! -e /tmp/mtdblock0 ]]
@@ -50,7 +51,7 @@ then
     mknod /tmp/mtdblock0 b 31 0 || exit 1
 fi
 
-echo "/dev/loop1,${esize}KiB" > /sys/module/block2mtd/parameters/block2mtd
+echo "$loop,${esize}KiB" > /sys/module/block2mtd/parameters/block2mtd
 
 mount -t jffs2 /tmp/mtdblock0 "$2" || exit 1
 
