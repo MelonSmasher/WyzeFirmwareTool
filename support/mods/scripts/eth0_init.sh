@@ -1,6 +1,11 @@
 #!/bin/sh
 
-insmod /driver/usbnet.ko
-insmod /driver/asix.ko
-ifconfig eth0 up
-udhcpc -i eth0 -p /var/run/udhcpc_eth0.pid -b
+sleep 30
+
+USB_COUNT=$(lsusb | wc -l)
+
+if [ $USB_COUNT -ge 2 ]; then
+  ifconfig eth0 up
+  sleep 1
+  udhcpc -i eth0 -p /var/run/udhcpc_eth0.pid -b
+fi

@@ -1,6 +1,6 @@
 from urllib.parse import urlparse
 from fwtool.models import FirmwarePart
-from fwtool.mods import enable_usbnet, enable_telnet
+from fwtool.mods import enable_usbnet, enable_telnet, enable_mods
 import os
 import requests
 import zipfile
@@ -102,6 +102,9 @@ def run_mods(unpack_dir, usb_eth=False, telnet=False):
     squashfs_1 = os.path.join(unpack_dir, 'squashfs_1')
     squashfs_2 = os.path.join(unpack_dir, 'squashfs_2')
     jffs2 = os.path.join(unpack_dir, 'jffs2')
+
+    if usb_eth:  ## add or statements here for other mods
+        enable_mods(squashfs_1, jffs2)
 
     if usb_eth:
         enable_usbnet(squashfs_1, squashfs_2, jffs2)
