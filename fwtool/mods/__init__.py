@@ -1,5 +1,6 @@
 import shutil
 import re
+import os
 
 
 def enable_usbnet(module_dir):
@@ -9,8 +10,8 @@ def enable_usbnet(module_dir):
     print('######################################')
     print('Enabling USB ethernet support for ASIX based ethernet adapters...')
     print('Copying kernel modules', end='... ')
-    shutil.copyfile('support/ko/usbnet.ko', module_dir)
-    shutil.copyfile('support/ko/asix.ko', module_dir)
+    shutil.copyfile('support/ko/usbnet.ko', os.path.join(module_dir, 'usbnet.ko'))
+    shutil.copyfile('support/ko/asix.ko', os.path.join(module_dir, 'asix.ko'))
     print('Done!')
 
 
