@@ -42,7 +42,7 @@ modprobe -r mtdblock &>/dev/null
 modprobe mtdram total_size=32768 erase_size=$esize || exit 1
 modprobe mtdblock || exit 1
 dd if="$1" of=/dev/mtdblock0 || exit 1
-mount -t jffs2 /dev/mtdblock0 $2 || exit 1
+mount -t jffs2 -o rw /dev/mtdblock0 $2 || exit 1
 
 echo "Successfully mounted $1 on $2"
 exit 0
