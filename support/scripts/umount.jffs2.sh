@@ -14,7 +14,7 @@ if [[ ${EUID} -ne 0 ]]; then
   exit 1
 fi
 
-sudo dd if=/dev/mtdblock0 of=${SYNC}
+#sudo dd if=/dev/mtdblock0 of=${SYNC}
 
 if sudo umount ${DST}; then
   rmmod mtdblock 2>/dev/null
