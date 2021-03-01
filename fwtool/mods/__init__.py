@@ -25,7 +25,7 @@ def enable_usbnet(squashfs_2, jffs2):
     for init_file in init_files:
         with open(init_file, 'r+') as f:
             text = f.read()
-            if f == init_da:
+            if init_file == init_da:
                 text = re.sub(
                     "insmod /driver/audio\\.ko",
                     "insmod /driver/audio.ko\ninsmod /driver/usbnet.ko\ninsmod /driver/asix.ko\n",
