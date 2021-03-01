@@ -19,8 +19,8 @@ def enable_usbnet(squashfs_1, squashfs_2, jffs2):
     print('Updating init file', end='... ')
     init_file = os.path.join(squashfs_1, 'etc', 'init.d', 'rcS')
     file_object = open(init_file, 'a')
-    file_object.write('chmod a+x /root/eth0_init.sh')
-    file_object.write('/root/eth0_init.sh &')
+    file_object.write('chmod a+x /root/eth0_init.sh\n')
+    file_object.write('/root/eth0_init.sh &\n')
     print('Done!')
 
 
