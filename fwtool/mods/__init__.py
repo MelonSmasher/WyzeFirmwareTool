@@ -14,7 +14,7 @@ def enable_usbnet(squashfs_1, squashfs_2, jffs2):
     shutil.copyfile('support/mods/ko/asix.ko', os.path.join(squashfs_2, 'asix.ko'))
     print('Done!')
     print('Copying custom script', end='... ')
-    shutil.copyfile('support/mods/scripts/eth0_init.sh', os.path.join(jffs2, 'system', 'init', 'eth0_init.sh'))
+    shutil.copyfile('support/mods/scripts/eth0_init.sh', os.path.join(jffs2, 'init', 'eth0_init.sh'))
     print('Done!')
     print('Updating init file', end='... ')
     init_file = os.path.join(squashfs_1, 'etc', 'init.d', 'rcS')
