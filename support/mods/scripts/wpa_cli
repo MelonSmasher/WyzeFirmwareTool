@@ -1,3 +1,52 @@
 #!/bin/sh
 
-echo 'wpa_state=COMPLETED'
+# state files
+STATE_SCANNED=/tmp/bogus_wpa_state_scanned
+STATE_HANDSHAKE=/tmp/bogus_wpa_state_handshake
+STATE_COMPLETED=/tmp/bogus_wpa_state_completed
+
+# Function gets eth0 IP from ifconfig
+get_eth0_ip(){
+  ifconfig eth0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}' # Wyze Camera
+  #ifconfig en7 | grep -w 'inet' | cut -d" " -f2 | awk '{print $1}' # testing on macOS
+}
+# Function checks that an IP is returned from get_eth0_ip
+check_eth0_up(){
+  if expr "$(get_eth0_ip)" : '[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$' >/dev/null; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Check to see if the bogus wpa state is complete
+if [ ! -f $STATE_COMPLETED ]; then
+  # If not complete, have we "scanned"
+  if [ ! -f $STATE_SCANNED ]; then
+    # If we have not scanned return the "scanning" status
+    echo 'wpa_state=SCANNING'
+    # Check to verify if eth0 is up
+    check_eth0_up
+    # Did we get a 0 code from the check_eth0_up function?
+    if [ "$?" -eq "0" ]; then
+      # If we did get 0 store the "scanned" status
+      touch $STATE_SCANNED
+    fi
+  else
+    # Scanned status has been completed, check to see if we've returned a bogus "4WAY_HANDSHAKE" status
+    if [ ! -f $STATE_HANDSHAKE ]; then
+      # If we haven't given a "4WAY_HANDSHAKE" status return one
+      echo 'wpa_state=4WAY_HANDSHAKE'
+      # Store the "4WAY_HANDSHAKE" status
+      touch $STATE_HANDSHAKE
+    else
+      # If we've already given the 4WAY_HANDSHAKE, return the "COMPLETED" status
+      echo "wpa_state=COMPLETED\nip_address=$(get_eth0_ip)"
+      # Store the "COMPLETED" status
+      touch $STATE_COMPLETED
+    fi
+  fi
+else
+  # If everything has completed return the IP of eth0
+  echo "wpa_state=COMPLETED\nip_address=$(get_eth0_ip)"
+fi
