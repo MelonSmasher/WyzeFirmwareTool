@@ -1,17 +1,22 @@
 #!/bin/sh
 
-sleep 2
-# Take a hammer to wpa_supplicant
-killall -9 wpa_supplicant
-sleep 2
-killall -9 wpa_supplicant
-sleep 2
-killall -9 wpa_supplicant
-sleep 2
-killall -9 wpa_supplicant
-
+# Wait for everything to start
+sleep 10
 # Take down wlan0
 ifconfig wlan0 down
+
+# Take a hammer to wpa_supplicant
+look_for_wpa_supplicant=true
+while $look_for_wpa_supplicant
+do
+  wpa_supplicant_pid=$(ps | grep wpa_supplicant | awk '{$1=$1};1' | cut -d ' ' -f 1)
+  if [ -z "${wpa_supplicant_pid}" ]; then
+    look_for_wpa_supplicant=false
+  else
+    killall -9 wpa_supplicant
+  fi
+  sleep 1
+done
 
 # Kill off udhcpc -t 10 -i wlan0 -p /var/run/udhcpc.pid -b
 while :
