@@ -13,7 +13,7 @@ def __copy_mod_script(squashfs_1, script_name, script_path):
 
 
 def __copy_modded_system_bin(jffs2, script_name):
-    src_file = os.path.join('suppor', 'mods', 'scripts', script_name)
+    src_file = os.path.join('support', 'mods', 'scripts', script_name)
     dest_file = os.path.join(jffs2, 'bin', script_name)
     shutil.copyfile(src_file, dest_file)
     subprocess.run(['sudo', 'chmod', '+x', dest_file])
