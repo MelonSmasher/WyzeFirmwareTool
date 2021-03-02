@@ -9,7 +9,7 @@ ifconfig wlan0 down
 look_for_wpa_supplicant=true
 while $look_for_wpa_supplicant
 do
-  wpa_supplicant_pid=$(ps | grep wpa_supplicant | awk '{$1=$1};1' | cut -d ' ' -f 1)
+  wpa_supplicant_pid=$(ps | grep wpa_supplicant | grep wlan0 | awk '{$1=$1};1' | cut -d ' ' -f 1)
   if [ -z "${wpa_supplicant_pid}" ]; then
     look_for_wpa_supplicant=false
   else
