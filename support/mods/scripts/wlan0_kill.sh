@@ -1,7 +1,6 @@
 #!/bin/sh
 
 kill_wpa_supplicant() {
-  # Take a hammer to wpa_supplicant
   look_for_wpa_supplicant=true
   while $look_for_wpa_supplicant
   do
@@ -19,13 +18,13 @@ kill_udhcpc() {
   look_for_udhcpc=true
   while $look_for_udhcpc
   do
+    sleep 30
     udhcpc_pid=$(ps | grep udhcpc | grep wlan0 | awk '{$1=$1};1' | cut -d ' ' -f 1)
     if [ -z "${udhcpc_pid}" ]; then
-      exit 0
+      look_for_udhcpc=false
     else
       kill -9 $udhcpc_pid
     fi
-    sleep 30
   done
 }
 
