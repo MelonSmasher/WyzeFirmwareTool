@@ -68,7 +68,7 @@ def disable_wlan(squashfs_1):
     print('Copying wlan0_kill script', end='... ')
     __copy_mod_script(squashfs_1, 'wlan0_kill.sh', 'support/mods/scripts/wlan0_kill.sh')
     print('Done!')
-    __update_hook(squashfs_1, '# /root/mods/wlan0_kill.sh &', '/root/mods/wlan0_kill.sh &\n')
+    __update_hook(squashfs_1, '# /root/mods/wlan0_kill.sh &', '/root/mods/wlan0_kill.sh &')
 
 
 def enable_usbnet(squashfs_1, squashfs_2, jffs2):
@@ -112,7 +112,7 @@ def enable_usbnet(squashfs_1, squashfs_2, jffs2):
             f.truncate()
     print('Done!')
 
-    __update_hook(squashfs_1, '# /root/mods/eth0_init.sh &', '/root/mods/eth0_init.sh &\n')
+    __update_hook(squashfs_1, '# /root/mods/eth0_init.sh &', '/root/mods/eth0_init.sh &')
 
 
 def enable_telnet(rcS_file):
