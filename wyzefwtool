@@ -32,6 +32,12 @@ parser.add_argument(
     help='Enable USB Ethernet support for ASIX based ethernet adapters.'
 )
 parser.add_argument(
+    '-d',
+    '--disable-wlan',
+    action='store_true',
+    help='Disabled the wifi connection. Requires that you enable USB ethernet support.'
+)
+parser.add_argument(
     '-t',
     '--telnet-server',
     action='store_true',
@@ -48,11 +54,17 @@ else:
         fw_ver = input('Firmware Version To Patch: ')
     zip_file = download_firmware(version=fw_ver)
 
+enable_eth = args.usb_ethernet
+
+if args.disable_wlan:
+    enable_eth = True
+
 bin_file = unzip_firmware(zip_file)
 unpack_dir = unpack_bin(bin_file)
 run_mods(
     unpack_dir,
-    usb_eth=args.usb_ethernet,
+    usb_eth=enable_eth,
+    dis_wlan=args.disable_wlan,
     telnet=args.telnet_server
 )
 wait_for_mods(unpack_dir)

@@ -60,6 +60,17 @@ def enable_mods(squashfs_1, jffs2):
     print('Done!')
 
 
+def disable_wlan(squashfs_1):
+    print('')
+    print('######################################')
+    print('Disabling wireless connection support')
+    print('######################################')
+    print('Copying wlan0_kill script', end='... ')
+    __copy_mod_script(squashfs_1, 'wlan0_kill.sh', 'support/mods/scripts/wlan0_kill.sh')
+    print('Done!')
+    __update_hook(squashfs_1, '# /root/mods/wlan0_kill.sh &', '/root/mods/wlan0_kill.sh &\n')
+
+
 def enable_usbnet(squashfs_1, squashfs_2, jffs2):
     print('')
     print('######################################')
