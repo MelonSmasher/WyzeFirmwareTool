@@ -1,0 +1,3 @@
+#!/bin/sh
+
+echo 'wpa_state=COMPLETED'

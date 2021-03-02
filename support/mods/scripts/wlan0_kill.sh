@@ -1,4 +1,4 @@
 #!/bin/sh
 
-sleep 60
+sleep 5
 killall wpa_supplicant

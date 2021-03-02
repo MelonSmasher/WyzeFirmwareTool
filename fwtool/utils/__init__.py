@@ -109,7 +109,7 @@ def run_mods(unpack_dir, dis_wlan=False, usb_eth=False, telnet=False):
     if usb_eth:
         enable_usbnet(squashfs_1, squashfs_2, jffs2)
     if dis_wlan:
-        disable_wlan(squashfs_1)
+        disable_wlan(squashfs_1, jffs2)
     if telnet:
         enable_telnet(os.path.join(squashfs_1, 'etc', 'init.d', 'rcS'))
 
