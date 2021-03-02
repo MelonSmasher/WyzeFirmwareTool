@@ -1,8 +1,13 @@
 #!/bin/sh
 
+sleep 2
 # Take a hammer to wpa_supplicant
 killall -9 wpa_supplicant
-sleep 5
+sleep 2
+killall -9 wpa_supplicant
+sleep 2
+killall -9 wpa_supplicant
+sleep 2
 killall -9 wpa_supplicant
 
 # Take down wlan0
@@ -12,7 +17,7 @@ ifconfig wlan0 down
 while :
 do
   udhcpc_pid=$(ps | grep udhcpc | grep wlan0 | awk '{$1=$1};1' | cut -d ' ' -f 1)
-  if [ -z "${udhcpc_pid}" ];
+  if [ -z "${udhcpc_pid}" ]; then
     exit 0
   else
     kill -9 $udhcpc_pid
