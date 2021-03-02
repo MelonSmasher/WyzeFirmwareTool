@@ -43,6 +43,12 @@ parser.add_argument(
     action='store_true',
     help='Enable persistent telnet server on the camera.'
 )
+parser.add_argument(
+    '-p',
+    '--set-root-pwd',
+    action='store_true',
+    help='Prompts you for a root password.'
+)
 args = parser.parse_args()
 
 if args.rtsp:
