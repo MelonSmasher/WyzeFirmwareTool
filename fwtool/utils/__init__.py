@@ -166,7 +166,7 @@ def pack_bin(unpack_dir, usb_eth=False, dis_wlan=False, telnet=False):
     # The intermediate bin path
     intermediate_bin_path = os.path.join(scratch_dir, bin_name)
     # Final bin path
-    final_bin_name = bin_name + str(int(time.time())) + '.bin'
+    final_bin_name = bin_name + '_' + str(int(time.time())) + '.bin'
     final_bin_path = os.path.join('firmware', 'bins', final_bin_name)
     # Define our firmware parts
     firmware_parts = [
