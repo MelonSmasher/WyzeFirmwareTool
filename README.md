@@ -59,7 +59,7 @@ sudo ./wyzefwtool -r
 #### All command options
 
 ```bash
-usage: wyzefwtool [-h] [-f [FIRMWARE_VERSION]] [-r] [-u] [-t]
+usage: wyzefwtool [-h] [-f [FIRMWARE_VERSION]] [-r] [-u] [-d] [-t]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -67,5 +67,6 @@ optional arguments:
                         The version number of the firmware to modify
   -r, --rtsp            Download the RTSP firmware. If used the Firmware Version argument is ignored.
   -u, --usb-ethernet    Enable USB Ethernet support for ASIX based ethernet adapters.
+  -d, --disable-wlan    Disabled the wifi connection. Requires that you enable USB ethernet support.
   -t, --telnet-server   Enable persistent telnet server on the camera.
 ```
