@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # Wait for everything to start
-sleep 10
+sleep 5
+
 # Take down wlan0
 ifconfig wlan0 down
 
@@ -15,7 +16,7 @@ do
   else
     killall -9 wpa_supplicant
   fi
-  sleep 1
+  sleep 15
 done
 
 # Kill off udhcpc -t 10 -i wlan0 -p /var/run/udhcpc.pid -b
@@ -27,5 +28,5 @@ do
   else
     kill -9 $udhcpc_pid
   fi
-  sleep 1
+  sleep 15
 done
