@@ -68,4 +68,4 @@ run_mods(
     telnet=args.telnet_server
 )
 wait_for_mods(unpack_dir)
-pack_bin(unpack_dir)
+pack_bin(unpack_dir, enable_eth, args.disable_wlan, args.telnet_server)
