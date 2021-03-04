@@ -92,7 +92,7 @@ def enable_usbnet(squashfs_1, squashfs_2, jffs2):
     __update_hook(squashfs_1, '# /root/mods/eth0_init.sh &', '/root/mods/eth0_init.sh &')
 
 
-def enable_telnet(squashfs_1, rcS_file):
+def enable_telnet(squashfs_1):
     print('')
     print('######################################')
     print('Enabling telnet')
@@ -111,6 +111,7 @@ def enable_telnet(squashfs_1, rcS_file):
         shadow_file.write(hash_string)
     print('Done!')
     print('Updating init rcS', end='... ')
+    rcS_file = os.path.join(squashfs_1, 'etc', 'init.d', 'rcS')
     with open(rcS_file, 'r+') as f:
         text = f.read()
         text = re.sub('telnetd &', 'busybox telnetd &', text)
