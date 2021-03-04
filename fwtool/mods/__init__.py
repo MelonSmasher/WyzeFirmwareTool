@@ -53,7 +53,7 @@ def enable_mods(squashfs_1, jffs2):
     print('Updating init files', end='... ')
     init_file = os.path.join(squashfs_1, 'etc', 'init.d', 'rcS')
     with open(init_file, 'a') as f:
-        f.write('/root/mods/mod_hooks.sh &')
+        f.write('\n# Inject the mod hook script\n/root/mods/mod_hooks.sh &')
         f.close()
     print('Done!')
 
