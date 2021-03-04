@@ -24,7 +24,7 @@ mess around with this.
 # Pre-Built Firmware
 
 Since the default root password is well known, I will not be building firmware with telnet enabled.
-If you'd like to enable telnet check out the section below on *Generating Your Own Firmware* or check out [HclX/WyzeHacks](https://github.com/HclX/WyzeHacks).
+If you'd like to enable telnet check out the section below on *Generating Your Own Firmware* or check out [HclX/WyzeHacks](https://github.com/HclX/WyzeHacks) (NFS not working ATM).
 
 WIP
 
