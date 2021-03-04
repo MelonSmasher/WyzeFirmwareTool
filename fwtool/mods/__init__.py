@@ -35,7 +35,6 @@ def __update_hook(squashfs_1, current, new):
         f.seek(0)
         f.write(text)
         f.truncate()
-        f.close()
     print('Done!')
 
 
@@ -54,7 +53,6 @@ def enable_mods(squashfs_1, jffs2):
     init_file = os.path.join(squashfs_1, 'etc', 'init.d', 'rcS')
     with open(init_file, 'a') as f:
         f.write('\n# Inject the mod hook script\n/root/mods/mod_hooks.sh &')
-        f.close()
     print('Done!')
 
 
@@ -111,7 +109,6 @@ def enable_telnet(squashfs_1, rcS_file):
     shadow_path = os.path.join(squashfs_1, 'etc', 'shadow')
     with open(shadow_path, 'w') as shadow_file:
         shadow_file.write(hash_string)
-        shadow_file.close()
     print('Done!')
     print('Updating init rcS', end='... ')
     with open(rcS_file, 'r+') as f:
@@ -120,5 +117,4 @@ def enable_telnet(squashfs_1, rcS_file):
         f.seek(0)
         f.write(text)
         f.truncate()
-        f.close()
     print('Done!')
