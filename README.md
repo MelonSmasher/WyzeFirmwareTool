@@ -13,6 +13,15 @@ This tool downloads, unpacks, and repacks Wyze firmware files.
 I only have a Wyze Cam v2 to mess around with. If you have a device you're willing to potentially brick feel free to
 mess around with this.
 
+# Pre-Built Firmware
+
+Since the default root password is well known, I will not be building firmware with telnet enabled.
+If you'd like to enable telnet check out the section below on *Generating Your Own Firmware* or check out [HclX/WyzeHacks](https://github.com/HclX/WyzeHacks).
+
+WIP
+
+# Generate Your Own Firmware
+
 ## Setup
 
 I've only tested this on Ubuntu 20.
