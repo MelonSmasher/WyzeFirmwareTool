@@ -25,7 +25,7 @@ mess around with this.
 
 Below are the mods this tool will enable
 
-* The `-u` / `--usb-ethernet` switch enabled USB ethernet adapter support for ASIX based adapters such as [this one](https://www.amazon.com/gp/product/B0863YJB8W/).
+* The `-u` / `--usb-ethernet` switch enables USB ethernet adapter support for ASIX based adapters such as [this one](https://www.amazon.com/gp/product/B0863YJB8W/).
 * The `-d` / `--disable-wlan` switch disables wireless on the camera. This switch implies the `-u` switch and enables USB ethernet.
 * The `-t` / `--telnet-server` switch enables a persistent telnet server on the camera. This option requires that you set a root password, you'll be prompted.
 * Custom user supplied mods. The tool will pause to allow you to make any custom modifications tht you'd like. The tool will resume when any key is pressed in the terminal. This step can be skipped with the `-y` / `--no-extra-mods` switch.
