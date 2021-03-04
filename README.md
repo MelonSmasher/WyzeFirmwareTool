@@ -6,7 +6,7 @@ A simple tool to handle some mundane tasks that are required when modifying Wyze
 
 This tool downloads, unpacks, mods, and repacks Wyze firmware files.
 
-## Dragons Ahead!
+## You'll shoot your eye out kid!
 
 A serious heads up! Modifying firmware and flashing modified firmware on your device can brick it.
 That means you could be holding a $25 - $100 paperweight if something goes wrong!
