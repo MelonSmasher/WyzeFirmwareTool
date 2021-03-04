@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sleep 30
+#sleep 30
 
 USB_COUNT=$(lsusb | wc -l)
 

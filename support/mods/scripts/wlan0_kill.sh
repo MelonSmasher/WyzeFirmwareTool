@@ -29,7 +29,7 @@ kill_udhcpc() {
 }
 
 # Wait for everything to start
-sleep 30
+sleep 45
 # Take down wlan0
 ifconfig wlan0 down
 # Take a hammer to wpa_supplicant
