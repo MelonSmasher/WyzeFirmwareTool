@@ -35,6 +35,7 @@ def __update_hook(squashfs_1, current, new):
         f.seek(0)
         f.write(text)
         f.truncate()
+        f.close()
     print('Done!')
 
 
@@ -49,24 +50,11 @@ def enable_mods(squashfs_1, jffs2):
     subprocess.run(['sudo', 'chown', '501:0', mod_dir])
     __copy_mod_script(squashfs_1, 'mod_hooks.sh', 'support/mods/scripts/mod_hooks.sh')
     print('Done!')
-
     print('Updating init files', end='... ')
-    init_files = [
-        os.path.join(jffs2, 'init', 'app_init.sh'),
-        os.path.join(jffs2, 'init', 'app_init_xiao.sh'),
-        os.path.join(jffs2, 'init', 'app_init_da.sh')
-    ]
-    for init_file in init_files:
-        with open(init_file, 'r+') as f:
-            text = f.read()
-            text = re.sub(
-                '        echo "iCamera is Running"',
-                '        /root/mods/mod_hooks.sh &\n        echo "iCamera is Running"',
-                text
-            )
-            f.seek(0)
-            f.write(text)
-            f.truncate()
+    init_file = os.path.join(squashfs_1, 'etc', 'init.d', 'rcS')
+    with open(init_file, 'a') as f:
+        f.write('/root/mods/mod_hooks.sh &')
+        f.close()
     print('Done!')
 
 
@@ -100,37 +88,9 @@ def enable_usbnet(squashfs_1, squashfs_2, jffs2):
     shutil.copyfile('support/mods/ko/usbnet.ko', os.path.join(squashfs_2, 'usbnet.ko'))
     shutil.copyfile('support/mods/ko/asix.ko', os.path.join(squashfs_2, 'asix.ko'))
     print('Done!')
-
     print('Copying eth0_init script', end='... ')
     __copy_mod_script(squashfs_1, 'eth0_init.sh', 'support/mods/scripts/eth0_init.sh')
     print('Done!')
-
-    print('Updating init files', end='... ')
-    init_files = [
-        os.path.join(jffs2, 'init', 'app_init.sh'),
-        os.path.join(jffs2, 'init', 'app_init_xiao.sh'),
-        os.path.join(jffs2, 'init', 'app_init_da.sh')
-    ]
-    for init_file in init_files:
-        with open(init_file, 'r+') as f:
-            text = f.read()
-            if os.path.join(jffs2, 'init', 'app_init_da.sh') == init_file:
-                text = re.sub(
-                    'insmod /driver/audio.ko',
-                    'insmod /driver/audio.ko\ninsmod /driver/usbnet.ko\ninsmod /driver/asix.ko',
-                    text
-                )
-            else:
-                text = re.sub(
-                    'insmod /driver/rtl8189ftv.ko',
-                    'insmod /driver/rtl8189ftv.ko\ninsmod /driver/usbnet.ko\ninsmod /driver/asix.ko',
-                    text
-                )
-            f.seek(0)
-            f.write(text)
-            f.truncate()
-    print('Done!')
-
     __update_hook(squashfs_1, '# /root/mods/eth0_init.sh &', '/root/mods/eth0_init.sh &')
 
 
@@ -160,4 +120,5 @@ def enable_telnet(squashfs_1, rcS_file):
         f.seek(0)
         f.write(text)
         f.truncate()
+        f.close()
     print('Done!')
