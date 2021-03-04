@@ -3,6 +3,8 @@ import re
 import os
 import subprocess
 import pathlib
+import crypt
+import getpass
 
 
 def __copy_mod_script(squashfs_1, script_name, script_path):
@@ -132,12 +134,25 @@ def enable_usbnet(squashfs_1, squashfs_2, jffs2):
     __update_hook(squashfs_1, '# /root/mods/eth0_init.sh &', '/root/mods/eth0_init.sh &')
 
 
-def enable_telnet(rcS_file):
+def enable_telnet(squashfs_1, rcS_file):
     print('')
     print('######################################')
     print('Enabling telnet')
     print('######################################')
     print('Enabling persistent telnet server...')
+    print('Changing root password...')
+    pwd = getpass.getpass()
+    pwd_confirm = getpass.getpass('Retype password: ')
+    while pwd != pwd_confirm:
+        print('Passwords do not match. Try again')
+        pwd = getpass.getpass()
+        pwd_confirm = getpass.getpass('Retype password: ')
+    hash_string = 'root:' + crypt.crypt(pwd, crypt.mksalt(crypt.METHOD_MD5)) + ':10933:0:99999:7:::'
+    shadow_path = os.path.join(squashfs_1, 'etc', 'shadow')
+    with open(shadow_path, 'w') as shadow_file:
+        shadow_file.write(hash_string)
+        shadow_file.close()
+    print('Done!')
     print('Updating init rcS', end='... ')
     with open(rcS_file, 'r+') as f:
         text = f.read()
