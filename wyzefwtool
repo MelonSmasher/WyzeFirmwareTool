@@ -41,7 +41,7 @@ parser.add_argument(
     '-t',
     '--telnet-server',
     action='store_true',
-    help='Enable persistent telnet server on the camera.'
+    help='Enable persistent telnet server on the camera. Requires that you set a root password.'
 )
 parser.add_argument(
     '-y',
