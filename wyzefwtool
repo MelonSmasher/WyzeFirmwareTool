@@ -44,12 +44,15 @@ parser.add_argument(
     help='Enable persistent telnet server on the camera.'
 )
 parser.add_argument(
-    '-p',
-    '--set-root-pwd',
+    '-y',
+    '--no-extra-mods',
     action='store_true',
-    help='Prompts you for a root password.'
+    help='The tool will not wait for you to make extra custom modifications.'
 )
 args = parser.parse_args()
+
+# @todo support other cameras
+cam_ver = 'cam_v2'
 
 if args.rtsp:
     zip_file = download_firmware(rtsp=True)
@@ -73,5 +76,6 @@ run_mods(
     dis_wlan=args.disable_wlan,
     telnet=args.telnet_server
 )
-wait_for_mods(unpack_dir)
-pack_bin(unpack_dir, enable_eth, args.disable_wlan, args.telnet_server)
+if not args.no_extra_mods:
+    wait_for_mods(unpack_dir)
+pack_bin(unpack_dir, cam_ver, enable_eth, args.disable_wlan, args.telnet_server)

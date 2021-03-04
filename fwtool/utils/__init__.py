@@ -109,7 +109,7 @@ def run_mods(unpack_dir, dis_wlan=False, usb_eth=False, telnet=False):
     if usb_eth:
         enable_usbnet(squashfs_1, squashfs_2, jffs2)
     if dis_wlan:
-        disable_wlan(squashfs_1)
+        disable_wlan(squashfs_1, jffs2)
     if telnet:
         enable_telnet(os.path.join(squashfs_1, 'etc', 'init.d', 'rcS'))
 
@@ -149,20 +149,21 @@ def wait_for_mods(unpack_dir):
     return result
 
 
-def pack_bin(unpack_dir, usb_eth=False, dis_wlan=False, telnet=False):
+def pack_bin(unpack_dir, cam_ver='cam_v2', usb_eth=False, dis_wlan=False, telnet=False):
     # Create a directory to have our working parts to pack
     scratch_dir = os.path.join(unpack_dir, 'scratch')
     pathlib.Path(scratch_dir).mkdir(parents=True, exist_ok=True)
     # Build the parts dir
     parts_dir = os.path.join(unpack_dir, 'parts')
     # Build the bin name
-    bin_name = os.path.basename(unpack_dir)
+    bin_name = cam_ver
     if telnet:
         bin_name = bin_name + '_telnetd'
     if usb_eth:
         bin_name = bin_name + '_usb-eth'
     if dis_wlan:
         bin_name = bin_name + '_no-wlan'
+    bin_name = bin_name + '_' + os.path.basename(unpack_dir)
     # The intermediate bin path
     intermediate_bin_path = os.path.join(scratch_dir, bin_name)
     # Final bin path

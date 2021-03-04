@@ -12,6 +12,14 @@ def __copy_mod_script(squashfs_1, script_name, script_path):
     subprocess.run(['sudo', 'chown', '501:0', hook_file])
 
 
+def __copy_modded_system_bin(jffs2, script_name):
+    src_file = os.path.join('support', 'mods', 'scripts', script_name)
+    dest_file = os.path.join(jffs2, 'bin', script_name)
+    shutil.copyfile(src_file, dest_file)
+    subprocess.run(['sudo', 'chmod', '+x', dest_file])
+    subprocess.run(['sudo', 'chown', '501:0', dest_file])
+
+
 def __update_hook(squashfs_1, current, new):
     print('Updating mod hook', end='... ')
     hook_script = os.path.join(squashfs_1, 'root', 'mods', 'mod_hooks.sh')
@@ -60,13 +68,22 @@ def enable_mods(squashfs_1, jffs2):
     print('Done!')
 
 
-def disable_wlan(squashfs_1):
+def disable_wlan(squashfs_1, jffs2):
     print('')
     print('######################################')
     print('Disabling wireless connection support')
     print('######################################')
     print('Copying wlan0_kill script', end='... ')
     __copy_mod_script(squashfs_1, 'wlan0_kill.sh', 'support/mods/scripts/wlan0_kill.sh')
+    print('Done!')
+    print('Replacing wpa_cli', end='... ')
+    __copy_modded_system_bin(jffs2, 'wpa_cli')
+    print('Done!')
+    print('Replacing wpa_supplicant', end='... ')
+    __copy_modded_system_bin(jffs2, 'wpa_supplicant')
+    print('Done!')
+    print('Replacing restart_wlan0.sh', end='... ')
+    __copy_modded_system_bin(jffs2, 'restart_wlan0.sh')
     print('Done!')
     __update_hook(squashfs_1, '# /root/mods/wlan0_kill.sh &', '/root/mods/wlan0_kill.sh &')
 
