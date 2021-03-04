@@ -4,7 +4,15 @@ A simple tool to handle some mundane tasks that are required when modifying Wyze
 
 ## What does it do?
 
-This tool downloads, unpacks, and repacks Wyze firmware files.
+This tool downloads, unpacks, mods, and repacks Wyze firmware files.
+
+## Dragons Ahead!
+
+A serious heads up! Modifying firmware and flashing modified firmware on your device can brick it.
+That means you could be holding a $25 - $100 paperweight if something goes wrong!
+Please consider the risks before proceeding!
+
+**I'm NOT responsible if your device turns into an overpriced rock, lights on fire, or anything in between!**
 
 ## Camera Support
 
@@ -68,7 +76,7 @@ sudo ./wyzefwtool -r
 #### All command options
 
 ```bash
-usage: wyzefwtool [-h] [-f [FIRMWARE_VERSION]] [-r] [-u] [-d] [-t]
+usage: wyzefwtool [-h] [-f [FIRMWARE_VERSION]] [-r] [-u] [-d] [-t] [-y]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -78,4 +86,5 @@ optional arguments:
   -u, --usb-ethernet    Enable USB Ethernet support for ASIX based ethernet adapters.
   -d, --disable-wlan    Disabled the wifi connection. Requires that you enable USB ethernet support.
   -t, --telnet-server   Enable persistent telnet server on the camera.
+  -y, --no-extra-mods   The tool will not wait for you to make extra custom modifications.
 ```
