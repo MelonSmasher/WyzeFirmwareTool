@@ -98,10 +98,6 @@ def enable_mods(squashfs_1, jffs2):
     print('######################################')
     print('Enabling mod support')
     print('######################################')
-    print('Copying hackutils bin and libhacks...')
-    __copy_mod_bin(squashfs_1, 'hackutils', 'support/mods/bin/hackutils')
-    __copy_mod_lib(squashfs_1, 'libhacks.so', 'support/mods/bin/libhacks.so')
-    print('Done')
     print('Copying mod hook script', end='... ')
     __copy_mod_file(__get_mod_root_path(squashfs_1), 'mod_hooks.sh', 'support/mods/scripts/mod_hooks.sh')
     print('Done!')
@@ -111,37 +107,9 @@ def enable_mods(squashfs_1, jffs2):
         os.path.join(jffs2, 'init', 'app_init_xiao.sh'),
         os.path.join(jffs2, 'init', 'app_init_da.sh')
     ]
-    print('Updating rc init script...')
-    rcS_file = os.path.join(squashfs_1, 'etc', 'init.d', 'rcS')
-    with open(rcS_file, 'r+') as f:
-        text = f.read()
-        text = re.sub(
-            'export LD_LIBRARY_PATH=/thirdlib:\\$LD_LIBRARY_PATH',
-            'export LD_LIBRARY_PATH=/thirdlib:$LD_LIBRARY_PATH\nexport LD_LIBRARY_PATH=/root/mods/lib:$LD_LIBRARY_PATH',
-            text
-        )
-        text = re.sub(
-            'export PATH=/system/bin:\\$PATH',
-            'export PATH=/system/bin:$PATH\nexport PATH=/root/mods/bin:$PATH',
-            text
-        )
-        text = re.sub(
-            '    \\$APP_INIT &',
-            '    LD_PRELOAD=/root/mods/lib/libhacks.so $APP_INIT &',
-            text
-        )
-        f.seek(0)
-        f.write(text)
-        f.truncate()
-    print('Done')
     for init_file in init_files:
         with open(init_file, 'r+') as f:
             text = f.read()
-            text = re.sub(
-                '/system/bin/iCamera &',
-                'LD_PRELOAD=/root/mods/lib/libhacks.so /system/bin/iCamera &',
-                text
-            )
             text = re.sub(
                 '        echo "iCamera is Running"',
                 '        /root/mods/mod_hooks.sh &\n        echo "iCamera is Running"',
@@ -282,21 +250,5 @@ def enable_nfs(squashfs_1):
         f.write(text)
         f.truncate()
     print('Done')
-    print('Making mount paths...')
-    #__mkdir_p(os.path.join(squashfs_1, 'media', 'mmcblk0p1'))
-    #__mkdir_p(os.path.join(squashfs_1, 'media', 'mmc'))
-    print('Done')
     print('Updating rc init script...')
-    rcS_file = os.path.join(squashfs_1, 'etc', 'init.d', 'rcS')
-    with open(rcS_file, 'r+') as f:
-        text = f.read()
-        text = re.sub(
-            '# networking',
-            '\n# MMC detection hook init \n/root/mods/bin/hackutils init\n\n# networking',
-            text
-        )
-        f.seek(0)
-        f.write(text)
-        f.truncate()
-    print('Done')
     __update_hook(squashfs_1, '# /root/mods/script/nfs.sh &', '/root/mods/script/nfs.sh &')
