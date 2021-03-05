@@ -19,18 +19,10 @@ Below are the mods this tool will enable
 
 * The `-u` / `--usb-ethernet` switch enables USB ethernet adapter support for ASIX based adapters such as [this one](https://www.amazon.com/gp/product/B0863YJB8W/).
 * The `-d` / `--disable-wlan` switch disables wireless on the camera. This switch implies the `-u` switch and enables USB ethernet.
-* The `-n` / `--nfs-sdcard` switch enables a hack that uses an NFS server as your SD Card. This option requires that you supply NFS server info when prompted.
 * The `-t` / `--telnet-server` switch enables a persistent telnet server on the camera. This option requires that you set a root password, you'll be prompted.
 * Custom user supplied mods. The tool will pause to allow you to make any custom modifications tht you'd like. The tool will resume when any key is pressed in the terminal. This step can be skipped with the `-y` / `--no-extra-mods` switch.
 
 More to come!
-
-### A note about NFS
-
-Unfortunately at this time in order for the camera to use your NFS share you'll need an SD card inserted in the camera to fool the camera.
-I have not figured out how to emulate an SD card with the NFS share, but instead bind mounted the `record` and `time_lapse` directories with directories on the NFS server.
-
-Your NFS server must be set up to allow mounting of subdirectories.
 
 # Dangers
 
@@ -86,8 +78,8 @@ Pick a version number
 from [this page](https://wyzelabs.zendesk.com/hc/en-us/articles/360024852172-Release-Notes-Firmware).
 
 ```bash
-sudo ./wyzefwtool -f <firmware-version> --usb-ethernet --telnet-server --nfs-sdcard --no-extra-mods
-# E.G: sudo ./wyzefwtool -f 4.9.6.218 --usb-ethernet --telnet-server --nfs-sdcard --no-extra-mods
+sudo ./wyzefwtool -f <firmware-version> --usb-ethernet --telnet-server --no-extra-mods
+# E.G: sudo ./wyzefwtool -f 4.9.6.218 --usb-ethernet --telnet-server --no-extra-mods
 ```
 
 #### Modify the RTSP firmware
@@ -96,7 +88,7 @@ To modify the [official RTSP firmware](https://wyzelabs.zendesk.com/hc/en-us/art
 the following:
 
 ```bash
-sudo ./wyzefwtool --rtsp --usb-ethernet --telnet-server --nfs-sdcard --no-extra-mods
+sudo ./wyzefwtool --rtsp --usb-ethernet --telnet-server --no-extra-mods
 ```
 
 #### All command options
@@ -112,6 +104,5 @@ optional arguments:
   -u, --usb-ethernet    Enable USB Ethernet support for ASIX based ethernet adapters.
   -d, --disable-wlan    Disabled the wifi connection. Requires that you enable USB ethernet support.
   -t, --telnet-server   Enable persistent telnet server on the camera. Requires that you set a root password.
-  -n, --nfs-sdcard      Enables the NFS SDCard hack. An NFS share is used as a virtual SD card. You will be prompted for NFS info.
   -y, --no-extra-mods   The tool will not wait for you to make extra custom modifications.
 ```
