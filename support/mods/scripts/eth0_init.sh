@@ -30,7 +30,7 @@ auto_eth0 () {
 while :
 do
   # Get the IP for eth0
-  eth0_ip = $(ifconfig eth0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}')
+  eth0_ip=$(ifconfig eth0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}')
   # Check if there is an IP
   if [ -z "${eth0_ip}" ]; then
     # If there is not an IP lets set up eth0
