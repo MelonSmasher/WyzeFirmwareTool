@@ -116,6 +116,16 @@ def enable_mods(squashfs_1, jffs2):
     with open(rcS_file, 'r+') as f:
         text = f.read()
         text = re.sub(
+            'export LD_LIBRARY_PATH=/thirdlib:\\$LD_LIBRARY_PATH',
+            'export LD_LIBRARY_PATH=/thirdlib:$LD_LIBRARY_PATH\nexport LD_LIBRARY_PATH=/root/mods/lib:$LD_LIBRARY_PATH',
+            text
+        )
+        text = re.sub(
+            'export PATH=/system/bin:\\$PATH',
+            'export PATH=/system/bin:$PATH\nexport PATH=/root/mods/bin:$PATH',
+            text
+        )
+        text = re.sub(
             '    \\$APP_INIT &',
             '    LD_PRELOAD=/root/mods/lib/libhacks.so $APP_INIT &',
             text
