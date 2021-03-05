@@ -190,6 +190,19 @@ def enable_nfs(squashfs_1):
     subprocess.run(['sudo', 'chmod', '+x', libhacks])
     subprocess.run(['sudo', 'chown', '501:0', libhacks])
     print('Done')
+    print('Updating init script...')
+    rcS_file = os.path.join(squashfs_1, 'etc', 'init.d', 'rcS')
+    with open(rcS_file, 'r+') as f:
+        text = f.read()
+        text = re.sub(
+            '# networking',
+            '\n# MMC detection hook init \n/bin/hackutils init\n\n# networking',
+            text
+        )
+        f.seek(0)
+        f.write(text)
+        f.truncate()
+    print('Done')
     __update_hook(squashfs_1, '# /root/mods/nfs.sh &', '/root/mods/nfs.sh &')
 
 
