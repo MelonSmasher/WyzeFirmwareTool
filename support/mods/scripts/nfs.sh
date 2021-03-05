@@ -72,7 +72,7 @@ mount_nfs() {
     done
 
     echo "WyzeHack: Notifying iCamera about SD card insertion event..."
-    /bin/hackutils mmc_insert
+    /root/mods/bin/hackutils mmc_insert
 
     # Mark this directory for this camera
     touch /media/mmcblk0p1/.mac_$DEVICE_ID
@@ -90,5 +90,5 @@ do
     printf "%c" "."
 done
 
-sleep 10
+sleep 30
 mount_nfs "${MY_NFS_ROOT}" "${MY_NFS_OPTS}"
