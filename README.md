@@ -35,7 +35,7 @@ More to come!
 # Pre-Built Firmware
 
 Since the default root password is well known, I will not be building firmware with telnet enabled.
-If you'd like to enable telnet check out the section below on *Generating Your Own Firmware* or check out [HclX/WyzeHacks](https://github.com/HclX/WyzeHacks) (NFS not working this firmware at this time. See [#62](https://github.com/HclX/WyzeHacks/issues/62)).
+If you'd like to enable telnet check out the section below on *Generating Your Own Firmware*.
 
 Check out the [releases page](https://github.com/MelonSmasher/WyzeFirmwareTool/releases) for pre-built firmware.
 

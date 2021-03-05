@@ -7,6 +7,16 @@ import crypt
 import getpass
 
 
+def __yes_or_no(question):
+    reply = str(input(question + ' (y/n): ')).lower().strip()
+    if reply[0] == 'y':
+        return True
+    if reply[0] == 'n':
+        return False
+    else:
+        return __yes_or_no("Uhhhh... please enter ")
+
+
 def __copy_mod_script(squashfs_1, script_name, script_path):
     hook_file = os.path.join(squashfs_1, 'root', 'mods', script_name)
     shutil.copyfile(script_path, hook_file)
@@ -132,6 +142,49 @@ def enable_usbnet(squashfs_1, squashfs_2, jffs2):
     print('Done!')
 
     __update_hook(squashfs_1, '# /root/mods/eth0_init.sh &', '/root/mods/eth0_init.sh &')
+
+
+def enable_nfs(squashfs_1):
+    print('')
+    print('######################################')
+    print('Enabling NFC SD Card')
+    print('######################################')
+    nfs_root = input("Enter the mount path of your NFS server e.g. (192.168.0.100:/volume1/shared_dir): ").strip()
+    nfs_server = nfs_root.split(':')[1]
+    nfs_opts = '-o nolock,rw,noatime,nodiratime'
+    if __yes_or_no("Override the default NFS options (-o nolock,rw,noatime,nodiratime)"):
+        nfs_opts = input("Enter the new NFS options: ")
+    print('Copying nfs script', end='... ')
+    __copy_mod_script(squashfs_1, 'nfs.sh', 'support/mods/scripts/nfs.sh')
+    print('Done!')
+    print('Updating init NFS Script...')
+    nfs_script = os.path.join(squashfs_1, 'root', 'mods', 'nfs.sh')
+    with open(nfs_script, 'r+') as f:
+        text = f.read()
+        text = re.sub(
+            'MY_NFS_HOST=',
+            'MY_NFS_HOST=' + '"' + nfs_server + '"',
+            text
+        )
+        text = re.sub(
+            'MY_NFS_ROOT=',
+            'MY_NFS_ROOT=' + '"' + nfs_root + '"',
+            text
+        )
+        text = re.sub(
+            'MY_NFS_OPTS=',
+            'MY_NFS_OPTS=' + '"' + nfs_opts + '"',
+            text
+        )
+        f.seek(0)
+        f.write(text)
+        f.truncate()
+    print('Done')
+    print('Copying bin and lib...')
+    shutil.copyfile('support/mods/bin/hackutils', os.path.join(squashfs_1, 'bin', 'hackutils'))
+    shutil.copyfile('support/mods/bon/libhacks.so', os.path.join(squashfs_1, 'thirdlib', 'libhacks.so'))
+    print('Done')
+    __update_hook(squashfs_1, '# /root/mods/nfs.sh &', '/root/mods/nfs.sh &')
 
 
 def enable_telnet(squashfs_1):
