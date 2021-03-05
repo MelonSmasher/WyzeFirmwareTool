@@ -4,7 +4,7 @@ kill_wpa_supplicant() {
   look_for_wpa_supplicant=true
   while $look_for_wpa_supplicant
   do
-    wpa_supplicant_pid=$(ps | grep wpa_supplicant | grep wlan0 | awk '{$1=$1};1' | cut -d ' ' -f 1)
+    wpa_supplicant_pid=$(ps | grep wpa_supplicant | grep -v "grep" | grep wlan0 | awk '{$1=$1};1' | cut -d ' ' -f 1)
     if [ -z "${wpa_supplicant_pid}" ]; then
       look_for_wpa_supplicant=false
     else
@@ -19,7 +19,7 @@ kill_udhcpc() {
   while $look_for_udhcpc
   do
     sleep 30
-    udhcpc_pid=$(ps | grep udhcpc | grep wlan0 | awk '{$1=$1};1' | cut -d ' ' -f 1)
+    udhcpc_pid=$(ps | grep udhcpc | grep -v "grep" | grep wlan0 | awk '{$1=$1};1' | cut -d ' ' -f 1)
     if [ -z "${udhcpc_pid}" ]; then
       look_for_udhcpc=false
     else
@@ -29,7 +29,7 @@ kill_udhcpc() {
 }
 
 # Wait for everything to start
-sleep 45
+sleep 25
 # Take down wlan0
 ifconfig wlan0 down
 # Take a hammer to wpa_supplicant
