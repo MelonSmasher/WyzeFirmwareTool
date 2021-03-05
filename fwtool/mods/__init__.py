@@ -150,7 +150,7 @@ def enable_nfs(squashfs_1):
     print('Enabling NFC SD Card')
     print('######################################')
     nfs_root = input("Enter the mount path of your NFS server e.g. (192.168.0.100:/volume1/shared_dir): ").strip()
-    nfs_server = nfs_root.split(':')[1]
+    nfs_server = nfs_root.split(':')[0]
     nfs_opts = '-o nolock,rw,noatime,nodiratime'
     if __yes_or_no("Override the default NFS options (-o nolock,rw,noatime,nodiratime)"):
         nfs_opts = input("Enter the new NFS options: ")
