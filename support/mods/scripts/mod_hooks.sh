@@ -3,9 +3,10 @@
 look_for_icamera=true
 while $look_for_icamera
 do
-  sleep 1
   pid=$(ps | grep iCamera | grep -v "grep" | awk '{$1=$1};1' | cut -d ' ' -f 1)
-  if [ ! -z "${pid}" ]; then
+  if [ -z "${pid}" ]; then
+    sleep 1
+  else
     look_for_icamera=false
   fi
 done
