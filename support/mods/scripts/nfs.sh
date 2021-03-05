@@ -90,4 +90,4 @@ do
     printf "%c" "."
 done
 
-mount_nfs $MY_NFS_ROOT $MY_NFS_OPTS
+mount_nfs "${MY_NFS_ROOT}" "${MY_NFS_OPTS}"
