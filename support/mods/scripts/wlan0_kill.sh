@@ -38,6 +38,8 @@ do
     # If there is not an IP lets wait
     sleep 1
   else
+    # Wait a bit for everything to settle
+    sleep 5
     # Take down wlan0
     ifconfig wlan0 down
     # Take a hammer to wpa_supplicant
