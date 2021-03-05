@@ -182,7 +182,7 @@ def enable_nfs(squashfs_1):
     print('Done')
     print('Copying bin and lib...')
     shutil.copyfile('support/mods/bin/hackutils', os.path.join(squashfs_1, 'bin', 'hackutils'))
-    shutil.copyfile('support/mods/bon/libhacks.so', os.path.join(squashfs_1, 'thirdlib', 'libhacks.so'))
+    shutil.copyfile('support/mods/bin/libhacks.so', os.path.join(squashfs_1, 'thirdlib', 'libhacks.so'))
     print('Done')
     __update_hook(squashfs_1, '# /root/mods/nfs.sh &', '/root/mods/nfs.sh &')
 
