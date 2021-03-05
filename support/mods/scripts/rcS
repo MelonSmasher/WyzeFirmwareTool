@@ -1,3 +1,0 @@
-#!/bin/sh
-
-LD_PRELOAD=/thirdlib/libhacks.so /etc/init.d/rcS_original &

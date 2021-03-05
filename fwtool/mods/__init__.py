@@ -208,13 +208,6 @@ def enable_nfs(squashfs_1):
         f.write(text)
         f.truncate()
     print('Done')
-    print('Shimming rcS...')
-    rcs = os.path.join(squashfs_1, 'etc', 'init.d', 'rcS')
-    shutil.move(rcs, rcs + '_original')
-    shutil.copyfile('support/mods/scripts/rcS', rcs)
-    subprocess.run(['sudo', 'chmod', '+x', rcs])
-    subprocess.run(['sudo', 'chown', '501:0', rcs])
-    print('Done')
     __update_hook(squashfs_1, '# /root/mods/nfs.sh &', '/root/mods/nfs.sh &')
 
 

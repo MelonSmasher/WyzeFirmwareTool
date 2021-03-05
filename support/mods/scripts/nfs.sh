@@ -85,7 +85,7 @@ MY_NFS_ROOT=
 MY_NFS_OPTS=
 
 printf "%s" "waiting for NFS Server ..."
-while ! ping -c 1 -n -w 1 $MY_NFS_HOST &> /dev/null
+while ! ping -c 1 -n $MY_NFS_HOST &> /dev/null
 do
     printf "%c" "."
 done
