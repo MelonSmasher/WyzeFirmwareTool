@@ -282,7 +282,10 @@ def enable_nfs(squashfs_1):
         f.write(text)
         f.truncate()
     print('Done')
-
+    print('Making mount paths...')
+    __mkdir_p(os.path.join(squashfs_1, 'media', 'mmcblk0p1'))
+    __mkdir_p(os.path.join(squashfs_1, 'media', 'mmc'))
+    print('Done')
     print('Updating rc init script...')
     rcS_file = os.path.join(squashfs_1, 'etc', 'init.d', 'rcS')
     with open(rcS_file, 'r+') as f:
