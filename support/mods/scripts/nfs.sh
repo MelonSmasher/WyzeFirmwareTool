@@ -105,6 +105,7 @@ mount_nfs() {
 MY_NFS_HOST=
 MY_NFS_ROOT=
 MY_NFS_OPTS=
+NFS_HOST_PING_FAILS=0
 
 # Wait for the camera to have network to reach the NFS server
 printf "%s" "waiting for NFS Server ..."
@@ -117,3 +118,19 @@ sleep 30
 
 # Run the mount function
 mount_nfs "${MY_NFS_ROOT}" "${MY_NFS_OPTS}"
+
+# Check that the NFS server is reachable. If the connection drops for 1 minute reboot the camera
+while :
+do
+  if ! ping -c 1 -n $MY_NFS_HOST &>/dev/null; then
+    NFS_HOST_PING_FAILS=$NFS_HOST_PING_FAILS+1
+  else
+    NFS_HOST_PING_FAILS=0
+  fi
+  if [ $NFS_HOST_PING_FAILS -gt 1 ]; then
+    sync
+    sleep 10
+    /sbin/reboot
+  fi
+  sleep 30
+done
