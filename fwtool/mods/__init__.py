@@ -103,7 +103,7 @@ def enable_mods(squashfs_1, jffs2):
     __copy_mod_lib(squashfs_1, 'libhacks.so', 'support/mods/bin/libhacks.so')
     print('Done')
     print('Copying mod hook script', end='... ')
-    __copy_mod_file(squashfs_1, 'mod_hooks.sh', 'support/mods/scripts/mod_hooks.sh')
+    __copy_mod_file(__get_mod_root_path(squashfs_1), 'mod_hooks.sh', 'support/mods/scripts/mod_hooks.sh')
     print('Done!')
     print('Updating init files', end='... ')
     init_files = [
