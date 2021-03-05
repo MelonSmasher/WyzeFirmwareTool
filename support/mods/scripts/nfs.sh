@@ -47,6 +47,12 @@ while ! ping -c 1 -n $MY_NFS_HOST &>/dev/null; do
   printf "%c" "."
 done
 
+# Wait for the SD card to mount
+printf "%s" "waiting for SD Card mount ..."
+while [ -z $(df | grep /dev/mmcblk0p1 | grep /media/mmc) ]; do
+    printf "%c" "."
+done
+
 # Run the mount function
 mount_nfs "${MY_NFS_ROOT}" "${MY_NFS_OPTS}"
 

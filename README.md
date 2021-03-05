@@ -30,6 +30,8 @@ More to come!
 Unfortunately at this time in order for the camera to use your NFS share you'll need an SD card inserted in the camera to fool the camera.
 I have not figured out how to emulate an SD card with the NFS share, but instead bind mounted the `record` and `time_lapse` directories with directories on the NFS server.
 
+Your NFS server must be set up to allow mounting of subdirectories.
+
 # Dangers
 
 ## WyzeHacks
