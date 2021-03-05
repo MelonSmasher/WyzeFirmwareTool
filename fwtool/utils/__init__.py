@@ -112,9 +112,8 @@ def run_mods(unpack_dir, dis_wlan=False, usb_eth=False, telnet=False, nfs=False)
         disable_wlan(squashfs_1, jffs2)
     if telnet:
         enable_telnet(squashfs_1)
-    if nfs:
+    if nfs:  # Must be run last due to modifications to rcS
         enable_nfs(squashfs_1)
-
 
 
 def wait_for_mods(unpack_dir):
