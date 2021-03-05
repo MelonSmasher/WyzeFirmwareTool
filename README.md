@@ -79,8 +79,8 @@ Pick a version number
 from [this page](https://wyzelabs.zendesk.com/hc/en-us/articles/360024852172-Release-Notes-Firmware).
 
 ```bash
-sudo ./wyzefwtool -f <firmware-version>
-# E.G: sudo ./wyzefwtool -f 4.9.6.218
+sudo ./wyzefwtool -f <firmware-version> --usb-ethernet --telnet-server --nfs-sdcard --no-extra-mods
+# E.G: sudo ./wyzefwtool -f 4.9.6.218 --usb-ethernet --telnet-server --nfs-sdcard --no-extra-mods
 ```
 
 #### Modify the RTSP firmware
@@ -89,7 +89,7 @@ To modify the [official RTSP firmware](https://wyzelabs.zendesk.com/hc/en-us/art
 the following:
 
 ```bash
-sudo ./wyzefwtool -r
+sudo ./wyzefwtool --rtsp --usb-ethernet --telnet-server --nfs-sdcard --no-extra-mods
 ```
 
 #### All command options
