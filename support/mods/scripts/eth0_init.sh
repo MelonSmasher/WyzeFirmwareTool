@@ -22,7 +22,7 @@ auto_eth0 () {
       kill -9 $udhcpc_pid
     fi
     # Request a new DHCP lease for eth0
-    udhcpc -i eth0 -p /var/run/udhcpc_eth0.pid -b
+    udhcpc -t 10 -i eth0 -p /var/run/udhcpc_eth0.pid -b
   fi
 }
 
