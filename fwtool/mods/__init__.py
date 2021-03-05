@@ -200,7 +200,7 @@ def enable_nfs(squashfs_1):
             text
         )
         text = re.sub(
-            '    $APP_INIT &',
+            '    \\$APP_INIT &',
             '    LD_PRELOAD=/thirdlib/libhacks.so $APP_INIT &',
             text
         )
