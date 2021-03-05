@@ -46,5 +46,7 @@ do
     kill_udhcpc &
     # Wait for background functions to complete
     wait
+    # Exit we're out of here
+    exit 0
   fi
 done
