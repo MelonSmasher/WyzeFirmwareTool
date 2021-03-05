@@ -44,7 +44,7 @@ Please consider the risks before proceeding!
 
 # Pre-Built Firmware
 
-Please build your own firmware! Since you'll need to set your own telnet password and NFS connection info, there i no point for me to provide prebuilt firmware.
+Please build your own firmware! Since you'll need to set your own telnet password and NFS connection info, there is no point for me to provide prebuilt firmware.
 Check out the section below on *Generating Your Own Firmware*.
 
 # Generate Your Own Firmware
