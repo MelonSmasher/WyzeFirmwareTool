@@ -89,6 +89,7 @@ def enable_usbnet(squashfs_1, squashfs_2, jffs2):
     print('Copying eth0_init script', end='... ')
     __copy_mod_script(squashfs_1, 'eth0_init.sh', 'support/mods/scripts/eth0_init.sh')
     print('Done!')
+    __update_hook(squashfs_1, '# load_eth0_kos', 'load_eth0_kos')
     __update_hook(squashfs_1, '# /root/mods/eth0_init.sh &', '/root/mods/eth0_init.sh &')
 
 
