@@ -90,4 +90,5 @@ do
     printf "%c" "."
 done
 
+sleep 10
 mount_nfs "${MY_NFS_ROOT}" "${MY_NFS_OPTS}"
