@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Based on HclX/WyzeHack https://github.com/HclX/WyzeHacks/blob/master/wyze_hack/main.sh#L313
+
 mount_nfs() {
   SD_ROOT='/media/mmc'
   NFS_MOUNT_DIR='/media/nfs'
@@ -36,24 +38,66 @@ mount_nfs() {
     done
 
     # Make the camera's directory if it does not exists
-    if [ ! -d "$CAM_DIR" ]; then
-      echo "WyzeHack: Creating data directory [$CAM_DIR]"
-      if ! mkdir -p "$CAM_DIR"; then
-        echo "WyzeHack: [mkdir -p $CAM_DIR] failed, will retry..."
+    if [ ! -d "${CAM_DIR}" ]; then
+      echo "WyzeHack: Creating data directory [${CAM_DIR}]"
+      if ! mkdir -p "${CAM_DIR}"; then
+        echo "WyzeHack: [mkdir -p ${CAM_DIR}] failed, will retry..."
         sleep 1
         continue
       fi
     fi
 
-    # Bind mount over the SD card
-    if ! mount -o bind "${CAM_DIR}" "${SD_ROOT}"; then
-      echo "Bind $CAM_DIR as ${SD_ROOT} failed, will retry..."
+    if [ ! -d "${CAM_DIR}/record" ]; then
+      if ! mkdir -p "${CAM_DIR}/record"; then
+        echo "WyzeHack: [mkdir -p ${CAM_DIR}/record] failed, will retry..."
+        sleep 1
+        continue
+      fi
+    fi
+
+    if [ ! -d "${CAM_DIR}/time_lapse" ]; then
+      if ! mkdir -p "${CAM_DIR}/time_lapse"; then
+        echo "WyzeHack: [mkdir -p ${CAM_DIR}/time_lapse] failed, will retry..."
+        sleep 1
+        continue
+      fi
+    fi
+
+    if [ ! -d "${SD_ROOT}/record" ]; then
+      if ! mkdir -p "${SD_ROOT}/record"; then
+        echo "WyzeHack: [mkdir -p ${SD_ROOT}/record] failed, will retry..."
+        sleep 1
+        continue
+      fi
+    fi
+
+    if [ ! -d "${SD_ROOT}/time_lapse" ]; then
+      if ! mkdir -p "${SD_ROOT}/time_lapse"; then
+        echo "WyzeHack: [mkdir -p ${SD_ROOT}/time_lapse] failed, will retry..."
+        sleep 1
+        continue
+      fi
+    fi
+
+    # Bind mount the record dir to the SD card
+    if ! mount -o bind "${CAM_DIR}/record" "${SD_ROOT}/record"; then
+      echo "Bind ${CAM_DIR}/record as ${SD_ROOT}/record failed, will retry..."
+      sleep 5
+      continue
+    fi
+
+    # Bind mount the record dir to the SD card
+    if ! mount -o bind "${CAM_DIR}/time_lapse" "${SD_ROOT}/time_lapse"; then
+      echo "Bind ${CAM_DIR}/time_lapse as ${SD_ROOT}/time_lapse failed, will retry..."
       sleep 5
       continue
     fi
 
     break
   done
+
+  # Mark this directory for this camera
+  touch "${CAM_DIR}/.mac_${DEVICE_ID}"
 
   return 0
 }
