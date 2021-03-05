@@ -27,6 +27,7 @@ Below are the mods this tool will enable
 
 * The `-u` / `--usb-ethernet` switch enables USB ethernet adapter support for ASIX based adapters such as [this one](https://www.amazon.com/gp/product/B0863YJB8W/).
 * The `-d` / `--disable-wlan` switch disables wireless on the camera. This switch implies the `-u` switch and enables USB ethernet.
+* The `-n` / `--nfs-sdcard` switch enables a hack that uses an NFS server as your SD Card. This option requires that you supply NFS server info when prompted.
 * The `-t` / `--telnet-server` switch enables a persistent telnet server on the camera. This option requires that you set a root password, you'll be prompted.
 * Custom user supplied mods. The tool will pause to allow you to make any custom modifications tht you'd like. The tool will resume when any key is pressed in the terminal. This step can be skipped with the `-y` / `--no-extra-mods` switch.
 
@@ -87,7 +88,7 @@ sudo ./wyzefwtool -r
 #### All command options
 
 ```bash
-usage: wyzefwtool [-h] [-f [FIRMWARE_VERSION]] [-r] [-u] [-d] [-t] [-y]
+usage: wyzefwtool [-h] [-f [FIRMWARE_VERSION]] [-r] [-u] [-d] [-t] [-n] [-y]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -97,5 +98,6 @@ optional arguments:
   -u, --usb-ethernet    Enable USB Ethernet support for ASIX based ethernet adapters.
   -d, --disable-wlan    Disabled the wifi connection. Requires that you enable USB ethernet support.
   -t, --telnet-server   Enable persistent telnet server on the camera. Requires that you set a root password.
+  -n, --nfs-sdcard      Enables the NFS SDCard hack. An NFS share is used as a virtual SD card. You will be prompted for NFS info.
   -y, --no-extra-mods   The tool will not wait for you to make extra custom modifications.
 ```
