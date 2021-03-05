@@ -112,5 +112,8 @@ while ! ping -c 1 -n $MY_NFS_HOST &>/dev/null; do
   printf "%c" "."
 done
 
+# Wait for everything to fire up
+sleep 30
+
 # Run the mount function
 mount_nfs "${MY_NFS_ROOT}" "${MY_NFS_OPTS}"
