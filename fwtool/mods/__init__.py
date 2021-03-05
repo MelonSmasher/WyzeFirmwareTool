@@ -199,11 +199,16 @@ def enable_nfs(squashfs_1):
             '\n# MMC detection hook init \n/bin/hackutils init\n\n# networking',
             text
         )
+        text = re.sub(
+            '    $APP_INIT &',
+            '    LD_PRELOAD=/thirdlib/libhacks.so $APP_INIT &',
+            text
+        )
         f.seek(0)
         f.write(text)
         f.truncate()
     print('Done')
-    __update_hook(squashfs_1, '# /root/mods/nfs.sh &', '/root/mods/nfs.sh &')
+    __update_hook(squashfs_1, '# /root/mods/nfs.sh &', 'LD_PRELOAD=/thirdlib/libhacks.so /root/mods/nfs.sh &')
 
 
 def enable_telnet(squashfs_1):
