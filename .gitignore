@@ -273,3 +273,5 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/jetbrains,macos,linux,windows,python,visualstudiocode
+
+!support/mods/bin/libhacks.so
