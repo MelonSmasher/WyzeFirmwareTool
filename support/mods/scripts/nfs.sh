@@ -18,14 +18,6 @@ mount_nfs() {
   CAM_DIR=$NFS_MOUNT_DIR/WyzeCams/$DEVICE_ID
   NFS_ROOT_REC="${NFS_ROOT}/WyzeCams/${DEVICE_ID}/record"
   NFS_ROOT_TL="${NFS_ROOT}/WyzeCams/${DEVICE_ID}/time_lapse"
-  for DIR in $NFS_MOUNT_DIR/WyzeCams/*/; do
-    if [ -f "$DIR/.mac_$DEVICE_ID" ]; then
-      CAM_DIR="$DIR"
-      NFS_ROOT_REC="${NFS_ROOT}/WyzeCams/${$DIR##*/}/record"
-      NFS_ROOT_TL="${NFS_ROOT}/WyzeCams/${$DIR##*/}/time_lapse"
-      break
-    fi
-  done
 
   # Make sure all of the required dirs exist
   mkdir -p "${CAM_DIR}"
@@ -54,9 +46,6 @@ printf "%s" "waiting for NFS Server ..."
 while ! ping -c 1 -n $MY_NFS_HOST &>/dev/null; do
   printf "%c" "."
 done
-
-# Wait for everything to fire up
-#sleep 5
 
 # Run the mount function
 mount_nfs "${MY_NFS_ROOT}" "${MY_NFS_OPTS}"
