@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# Based on HclX/WyzeHack https://github.com/HclX/WyzeHacks/blob/master/wyze_hack/main.sh#L313
-
 mount_nfs() {
   SD_ROOT='/media/mmc'
   NFS_MOUNT_DIR='/media/nfs'
@@ -9,92 +7,36 @@ mount_nfs() {
   NFS_OPTIONS=$2
   DEVICE_ID=$(grep -oE "NETRELATED_MAC=[A-F0-9]{12}" /params/config/.product_config | sed 's/NETRELATED_MAC=//g')
 
-  local NFS_MOUNT="/bin/mount $NFS_OPTIONS"
-  local RETRY_COUNT=0
+  NFS_MOUNT="/bin/mount $NFS_OPTIONS"
 
-  while true; do
-    let RETRY_COUNT=$RETRY_COUNT+1
-    if [ $RETRY_COUNT -gt 100 ]; then
-      return 1
+  # Make our mount dir
+  mkdir -p $NFS_MOUNT_DIR
+  # Mount the NFS volume
+  $NFS_MOUNT $NFS_ROOT $NFS_MOUNT_DIR
+
+  # Determine the NFS share directory for this camera based on the device ID/MAC
+  CAM_DIR=$NFS_MOUNT_DIR/WyzeCams/$DEVICE_ID
+  NFS_ROOT_REC="${NFS_ROOT}/WyzeCams/${DEVICE_ID}/record"
+  NFS_ROOT_TL="${NFS_ROOT}/WyzeCams/${DEVICE_ID}/time_lapse"
+  for DIR in $NFS_MOUNT_DIR/WyzeCams/*/; do
+    if [ -f "$DIR/.mac_$DEVICE_ID" ]; then
+      CAM_DIR="$DIR"
+      NFS_ROOT_REC="${NFS_ROOT}/WyzeCams/${$DIR##*/}/record"
+      NFS_ROOT_TL="${NFS_ROOT}/WyzeCams/${$DIR##*/}/time_lapse"
+      break
     fi
-
-    if ! /bin/mount | grep -q "$NFS_ROOT on $NFS_MOUNT_DIR"; then
-      # Make our mount dir
-      mkdir -p $NFS_MOUNT_DIR
-      # Mount the NFS volume
-      if ! $NFS_MOUNT $NFS_ROOT $NFS_MOUNT_DIR; then
-        sleep 10
-        continue
-      fi
-    fi
-
-    # Determine the NFS share directory for this camera based on the device ID/MAC
-    local CAM_DIR=$NFS_MOUNT_DIR/WyzeCams/$DEVICE_ID
-    for DIR in $NFS_MOUNT_DIR/WyzeCams/*/; do
-      if [ -f "$DIR/.mac_$DEVICE_ID" ]; then
-        CAM_DIR="$DIR"
-        break
-      fi
-    done
-
-    # Make the camera's directory if it does not exists
-    if [ ! -d "${CAM_DIR}" ]; then
-      echo "WyzeHack: Creating data directory [${CAM_DIR}]"
-      if ! mkdir -p "${CAM_DIR}"; then
-        echo "WyzeHack: [mkdir -p ${CAM_DIR}] failed, will retry..."
-        sleep 1
-        continue
-      fi
-    fi
-
-    if [ ! -d "${CAM_DIR}/record" ]; then
-      if ! mkdir -p "${CAM_DIR}/record"; then
-        echo "WyzeHack: [mkdir -p ${CAM_DIR}/record] failed, will retry..."
-        sleep 1
-        continue
-      fi
-    fi
-
-    if [ ! -d "${CAM_DIR}/time_lapse" ]; then
-      if ! mkdir -p "${CAM_DIR}/time_lapse"; then
-        echo "WyzeHack: [mkdir -p ${CAM_DIR}/time_lapse] failed, will retry..."
-        sleep 1
-        continue
-      fi
-    fi
-
-    if [ ! -d "${SD_ROOT}/record" ]; then
-      if ! mkdir -p "${SD_ROOT}/record"; then
-        echo "WyzeHack: [mkdir -p ${SD_ROOT}/record] failed, will retry..."
-        sleep 1
-        continue
-      fi
-    fi
-
-    if [ ! -d "${SD_ROOT}/time_lapse" ]; then
-      if ! mkdir -p "${SD_ROOT}/time_lapse"; then
-        echo "WyzeHack: [mkdir -p ${SD_ROOT}/time_lapse] failed, will retry..."
-        sleep 1
-        continue
-      fi
-    fi
-
-    # Bind mount the record dir to the SD card
-    if ! mount -o bind "${CAM_DIR}/record" "${SD_ROOT}/record"; then
-      echo "Bind ${CAM_DIR}/record as ${SD_ROOT}/record failed, will retry..."
-      sleep 5
-      continue
-    fi
-
-    # Bind mount the record dir to the SD card
-    if ! mount -o bind "${CAM_DIR}/time_lapse" "${SD_ROOT}/time_lapse"; then
-      echo "Bind ${CAM_DIR}/time_lapse as ${SD_ROOT}/time_lapse failed, will retry..."
-      sleep 5
-      continue
-    fi
-
-    break
   done
+
+  # Make sure all of the required dirs exist
+  mkdir -p "${CAM_DIR}"
+  mkdir -p "${CAM_DIR}/record"
+  mkdir -p "${CAM_DIR}/time_lapse"
+  mkdir -p "${SD_ROOT}/record"
+  mkdir -p "${SD_ROOT}/time_lapse"
+
+  # Mount the record and time_lapse dir directly at the SD Card
+  $NFS_MOUNT $NFS_ROOT_REC "${SD_ROOT}/record"
+  $NFS_MOUNT $NFS_ROOT_TL "${SD_ROOT}/time_lapse"
 
   # Mark this directory for this camera
   touch "${CAM_DIR}/.mac_${DEVICE_ID}"
@@ -114,14 +56,13 @@ while ! ping -c 1 -n $MY_NFS_HOST &>/dev/null; do
 done
 
 # Wait for everything to fire up
-sleep 30
+#sleep 5
 
 # Run the mount function
 mount_nfs "${MY_NFS_ROOT}" "${MY_NFS_OPTS}"
 
 # Check that the NFS server is reachable. If the connection drops for 1 minute reboot the camera
-while :
-do
+while :; do
   if ! ping -c 1 -n $MY_NFS_HOST &>/dev/null; then
     NFS_HOST_PING_FAILS=$NFS_HOST_PING_FAILS+1
   else
