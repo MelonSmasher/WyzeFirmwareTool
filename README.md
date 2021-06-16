@@ -78,6 +78,7 @@ Install the following with your package manager:
 * pip
 * u-boot-tools
 * mtd-utils
+* squashfs-tools / squashfs (macOS)
 
 ### Install
 
